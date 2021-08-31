@@ -36,12 +36,12 @@ namespace Sapphire_Control_Panel
             this.label3 = new System.Windows.Forms.Label();
             this.baudrateBox = new System.Windows.Forms.TextBox();
             this.updatePortsListButton = new System.Windows.Forms.Button();
-            this.disconnectIndicator = new System.Windows.Forms.RadioButton();
-            this.connectIndicator = new System.Windows.Forms.RadioButton();
             this.disconnectButton = new System.Windows.Forms.Button();
             this.connectButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.portList = new System.Windows.Forms.ComboBox();
+            this.disconnectIndicator = new System.Windows.Forms.RadioButton();
+            this.connectIndicator = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -55,16 +55,22 @@ namespace Sapphire_Control_Panel
             this.label5 = new System.Windows.Forms.Label();
             this.openFilePath = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.generateButton = new System.Windows.Forms.Button();
+            this.showButton = new System.Windows.Forms.Button();
             this.statusBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.generateButton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.progress = new System.Windows.Forms.ProgressBar();
-            this.showButton = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.previewPic = new System.Windows.Forms.PictureBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.xorCheck = new System.Windows.Forms.RadioButton();
+            this.orCheck = new System.Windows.Forms.RadioButton();
+            this.button2 = new System.Windows.Forms.Button();
+            this.overlayCheck = new System.Windows.Forms.CheckBox();
+            this.inputText = new System.Windows.Forms.RichTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -73,7 +79,12 @@ namespace Sapphire_Control_Panel
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.previewPic)).BeginInit();
             this.groupBox5.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // port
+            // 
+            this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.port_DataReceived);
             // 
             // groupBox1
             // 
@@ -136,33 +147,6 @@ namespace Sapphire_Control_Panel
             this.updatePortsListButton.UseVisualStyleBackColor = true;
             this.updatePortsListButton.Click += new System.EventHandler(this.updatePortsListButton_Click);
             // 
-            // disconnectIndicator
-            // 
-            this.disconnectIndicator.AutoCheck = false;
-            this.disconnectIndicator.AutoSize = true;
-            this.disconnectIndicator.Location = new System.Drawing.Point(190, 74);
-            this.disconnectIndicator.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.disconnectIndicator.Name = "disconnectIndicator";
-            this.disconnectIndicator.Size = new System.Drawing.Size(58, 20);
-            this.disconnectIndicator.TabIndex = 6;
-            this.disconnectIndicator.TabStop = true;
-            this.disconnectIndicator.Text = "切断";
-            this.disconnectIndicator.UseVisualStyleBackColor = true;
-            // 
-            // connectIndicator
-            // 
-            this.connectIndicator.AutoCheck = false;
-            this.connectIndicator.AutoSize = true;
-            this.connectIndicator.BackColor = System.Drawing.SystemColors.Control;
-            this.connectIndicator.Location = new System.Drawing.Point(94, 74);
-            this.connectIndicator.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.connectIndicator.Name = "connectIndicator";
-            this.connectIndicator.Size = new System.Drawing.Size(58, 20);
-            this.connectIndicator.TabIndex = 5;
-            this.connectIndicator.TabStop = true;
-            this.connectIndicator.Text = "接続";
-            this.connectIndicator.UseVisualStyleBackColor = false;
-            // 
             // disconnectButton
             // 
             this.disconnectButton.Location = new System.Drawing.Point(142, 63);
@@ -205,6 +189,33 @@ namespace Sapphire_Control_Panel
             this.portList.Size = new System.Drawing.Size(184, 24);
             this.portList.TabIndex = 0;
             // 
+            // disconnectIndicator
+            // 
+            this.disconnectIndicator.AutoCheck = false;
+            this.disconnectIndicator.AutoSize = true;
+            this.disconnectIndicator.Location = new System.Drawing.Point(190, 74);
+            this.disconnectIndicator.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.disconnectIndicator.Name = "disconnectIndicator";
+            this.disconnectIndicator.Size = new System.Drawing.Size(58, 20);
+            this.disconnectIndicator.TabIndex = 6;
+            this.disconnectIndicator.TabStop = true;
+            this.disconnectIndicator.Text = "切断";
+            this.disconnectIndicator.UseVisualStyleBackColor = true;
+            // 
+            // connectIndicator
+            // 
+            this.connectIndicator.AutoCheck = false;
+            this.connectIndicator.AutoSize = true;
+            this.connectIndicator.BackColor = System.Drawing.SystemColors.Control;
+            this.connectIndicator.Location = new System.Drawing.Point(94, 74);
+            this.connectIndicator.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.connectIndicator.Name = "connectIndicator";
+            this.connectIndicator.Size = new System.Drawing.Size(58, 20);
+            this.connectIndicator.TabIndex = 5;
+            this.connectIndicator.TabStop = true;
+            this.connectIndicator.Text = "接続";
+            this.connectIndicator.UseVisualStyleBackColor = false;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button1);
@@ -212,7 +223,7 @@ namespace Sapphire_Control_Panel
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox2.Size = new System.Drawing.Size(203, 156);
+            this.groupBox2.Size = new System.Drawing.Size(203, 162);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "制御";
@@ -234,11 +245,11 @@ namespace Sapphire_Control_Panel
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.logBox);
-            this.groupBox3.Location = new System.Drawing.Point(13, 441);
+            this.groupBox3.Location = new System.Drawing.Point(13, 579);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox3.Size = new System.Drawing.Size(470, 138);
+            this.groupBox3.Size = new System.Drawing.Size(470, 90);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "ログ";
@@ -250,7 +261,7 @@ namespace Sapphire_Control_Panel
             this.logBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.logBox.Name = "logBox";
             this.logBox.ReadOnly = true;
-            this.logBox.Size = new System.Drawing.Size(451, 105);
+            this.logBox.Size = new System.Drawing.Size(454, 61);
             this.logBox.TabIndex = 0;
             this.logBox.Text = "";
             // 
@@ -288,10 +299,10 @@ namespace Sapphire_Control_Panel
             this.selectLV2.Location = new System.Drawing.Point(134, 126);
             this.selectLV2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.selectLV2.Name = "selectLV2";
-            this.selectLV2.Size = new System.Drawing.Size(114, 20);
+            this.selectLV2.Size = new System.Drawing.Size(66, 20);
             this.selectLV2.TabIndex = 27;
             this.selectLV2.TabStop = true;
-            this.selectLV2.Text = "L-V2(Draft)";
+            this.selectLV2.Text = "L-V2+";
             this.selectLV2.UseVisualStyleBackColor = true;
             this.selectLV2.CheckedChanged += new System.EventHandler(this.selectLV2_CheckedChanged);
             // 
@@ -361,6 +372,29 @@ namespace Sapphire_Control_Panel
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "操作";
             // 
+            // generateButton
+            // 
+            this.generateButton.Location = new System.Drawing.Point(8, 22);
+            this.generateButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.generateButton.Name = "generateButton";
+            this.generateButton.Size = new System.Drawing.Size(102, 25);
+            this.generateButton.TabIndex = 13;
+            this.generateButton.Text = "データ生成";
+            this.generateButton.UseVisualStyleBackColor = true;
+            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
+            // 
+            // showButton
+            // 
+            this.showButton.Font = new System.Drawing.Font("PC-9800", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.showButton.Location = new System.Drawing.Point(118, 22);
+            this.showButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.showButton.Name = "showButton";
+            this.showButton.Size = new System.Drawing.Size(130, 25);
+            this.showButton.TabIndex = 10;
+            this.showButton.Text = "転送";
+            this.showButton.UseVisualStyleBackColor = true;
+            this.showButton.Click += new System.EventHandler(this.showButton_Click);
+            // 
             // statusBox
             // 
             this.statusBox.Location = new System.Drawing.Point(96, 19);
@@ -381,17 +415,6 @@ namespace Sapphire_Control_Panel
             this.label8.TabIndex = 14;
             this.label8.Text = "ステータス";
             // 
-            // generateButton
-            // 
-            this.generateButton.Location = new System.Drawing.Point(8, 22);
-            this.generateButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(102, 25);
-            this.generateButton.TabIndex = 13;
-            this.generateButton.Text = "データ生成";
-            this.generateButton.UseVisualStyleBackColor = true;
-            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -409,18 +432,6 @@ namespace Sapphire_Control_Panel
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(152, 16);
             this.progress.TabIndex = 11;
-            // 
-            // showButton
-            // 
-            this.showButton.Font = new System.Drawing.Font("PC-9800", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.showButton.Location = new System.Drawing.Point(118, 22);
-            this.showButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.showButton.Name = "showButton";
-            this.showButton.Size = new System.Drawing.Size(130, 25);
-            this.showButton.TabIndex = 10;
-            this.showButton.Text = "転送";
-            this.showButton.UseVisualStyleBackColor = true;
-            this.showButton.Click += new System.EventHandler(this.showButton_Click);
             // 
             // groupBox7
             // 
@@ -469,11 +480,79 @@ namespace Sapphire_Control_Panel
             this.label2.TabIndex = 15;
             this.label2.Text = "COMポート";
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.xorCheck);
+            this.groupBox8.Controls.Add(this.orCheck);
+            this.groupBox8.Controls.Add(this.button2);
+            this.groupBox8.Controls.Add(this.overlayCheck);
+            this.groupBox8.Controls.Add(this.inputText);
+            this.groupBox8.Location = new System.Drawing.Point(12, 447);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(471, 126);
+            this.groupBox8.TabIndex = 32;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "テキスト領域";
+            // 
+            // xorCheck
+            // 
+            this.xorCheck.AutoSize = true;
+            this.xorCheck.Location = new System.Drawing.Point(330, 70);
+            this.xorCheck.Name = "xorCheck";
+            this.xorCheck.Size = new System.Drawing.Size(50, 20);
+            this.xorCheck.TabIndex = 5;
+            this.xorCheck.TabStop = true;
+            this.xorCheck.Text = "XOR";
+            this.xorCheck.UseVisualStyleBackColor = true;
+            this.xorCheck.CheckedChanged += new System.EventHandler(this.xorCheck_CheckedChanged);
+            // 
+            // orCheck
+            // 
+            this.orCheck.AutoSize = true;
+            this.orCheck.Location = new System.Drawing.Point(330, 48);
+            this.orCheck.Name = "orCheck";
+            this.orCheck.Size = new System.Drawing.Size(42, 20);
+            this.orCheck.TabIndex = 4;
+            this.orCheck.TabStop = true;
+            this.orCheck.Text = "OR";
+            this.orCheck.UseVisualStyleBackColor = true;
+            this.orCheck.CheckedChanged += new System.EventHandler(this.orCheck_CheckedChanged);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(330, 96);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(123, 24);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "文字転送";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // overlayCheck
+            // 
+            this.overlayCheck.AutoSize = true;
+            this.overlayCheck.Location = new System.Drawing.Point(330, 22);
+            this.overlayCheck.Name = "overlayCheck";
+            this.overlayCheck.Size = new System.Drawing.Size(123, 20);
+            this.overlayCheck.TabIndex = 2;
+            this.overlayCheck.Text = "オーバーレイ";
+            this.overlayCheck.UseVisualStyleBackColor = true;
+            // 
+            // inputText
+            // 
+            this.inputText.Font = new System.Drawing.Font("PC-9800", 8F);
+            this.inputText.Location = new System.Drawing.Point(12, 22);
+            this.inputText.Name = "inputText";
+            this.inputText.Size = new System.Drawing.Size(310, 98);
+            this.inputText.TabIndex = 0;
+            this.inputText.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(487, 583);
+            this.ClientSize = new System.Drawing.Size(487, 681);
+            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox3);
@@ -498,6 +577,8 @@ namespace Sapphire_Control_Panel
             ((System.ComponentModel.ISupportInitialize)(this.previewPic)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -539,6 +620,12 @@ namespace Sapphire_Control_Panel
         private System.Windows.Forms.PictureBox previewPic;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox overlayCheck;
+        private System.Windows.Forms.RichTextBox inputText;
+        private System.Windows.Forms.RadioButton xorCheck;
+        private System.Windows.Forms.RadioButton orCheck;
     }
 }
 

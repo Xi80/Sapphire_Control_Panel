@@ -298,12 +298,154 @@ namespace Sapphire_Control_Panel
             proc.Start();
         }
 
+        private string RemoveNewLine(string str)
+        {
+            return str.Replace("\r", "").Replace("\n", "");
+        }
+
+        private byte translate(char c)
+        {
+            switch (c)
+            {
+                case '｡':
+                    return 0xA1;
+                case '「':
+                    return 0xA2;
+                case '」':
+                    return 0xA3;
+                case '、':
+                    return 0xA4;
+                case '・':
+                    return 0xA5;
+                case 'ｦ':
+                    return 0xA6;
+                case 'ｧ':
+                    return 0xA7;
+                case 'ｨ':
+                    return 0xA8;
+                case 'ｩ':
+                    return 0xA9;
+                case 'ｪ':
+                    return 0xAA;
+                case 'ｫ':
+                    return 0xAB;
+                case 'ｬ':
+                    return 0xAC;
+                case 'ｭ':
+                    return 0xAD;
+                case 'ｮ':
+                    return 0xAE;
+                case 'ｯ':
+                    return 0xAF;
+                case 'ｰ':
+                    return 0xB0;
+                case 'ｱ':
+                    return 0xB1;
+                case 'ｲ':
+                    return 0xB2;
+                case 'ｳ':
+                    return 0xB3;
+                case 'ｴ':
+                    return 0xB4;
+                case 'ｵ':
+                    return 0xB5;
+                case 'ｶ':
+                    return 0xB6;
+                case 'ｷ':
+                    return 0xB7;
+                case 'ｸ':
+                    return 0xB8;
+                case 'ｹ':
+                    return 0xB9;
+                case 'ｺ':
+                    return 0xBA;
+                case 'ｻ':
+                    return 0xBB;
+                case 'ｼ':
+                    return 0xBC;
+                case 'ｽ':
+                    return 0xBD;
+                case 'ｾ':
+                    return 0xBE;
+                case 'ｿ':
+                    return 0xBF;
+                case 'ﾀ':
+                    return 0xC0;
+                case 'ﾁ':
+                    return 0xC1;
+                case 'ﾂ':
+                    return 0xC2;
+                case 'ﾃ':
+                    return 0xC3;
+                case 'ﾄ':
+                    return 0xC4;
+                case 'ﾅ':
+                    return 0xC5;
+                case 'ﾆ':
+                    return 0xC6;
+                case 'ﾇ':
+                    return 0xC7;
+                case 'ﾈ':
+                    return 0xC8;
+                case 'ﾉ':
+                    return 0xC9;
+                case 'ﾊ':
+                    return 0xCA;
+                case 'ﾋ':
+                    return 0xCB;
+                case 'ﾌ':
+                    return 0xCC;
+                case 'ﾍ':
+                    return 0xCD;
+                case 'ﾎ':
+                    return 0xCE;
+                case 'ﾏ':
+                    return 0xCF;
+                case 'ﾐ':
+                    return 0xD0;
+                case 'ﾑ':
+                    return 0xD1;
+                case 'ﾒ':
+                    return 0xD2;
+                case 'ﾓ':
+                    return 0xD3;
+                case 'ﾔ':
+                    return 0xD4;
+                case 'ﾕ':
+                    return 0xD5;
+                case 'ﾖ':
+                    return 0xD6;
+                case 'ﾗ':
+                    return 0xD7;
+                case 'ﾘ':
+                    return 0xD8;
+                case 'ﾙ':
+                    return 0xD9;
+                case 'ﾚ':
+                    return 0xDA;
+                case 'ﾛ':
+                    return 0xDB;
+                case 'ﾜ':
+                    return 0xDC;
+                case 'ﾝ':
+                    return 0xDD;
+                case 'ﾞ':
+                    return 0xDE;
+                case 'ﾟ':
+                    return 0xDF;
+                default:
+                    return (byte)c;
+            }
+
+            
+        }
         private void MainForm_Load(object sender, EventArgs e)
         {
             //インジケータを初期化
             AddLogMessage("初期化開始");
             logBox.HideSelection = false;
             selectLV2.Checked = true;
+            orCheck.Checked = true;
             SetStatus(0);
             SetIndicator(false);
             UpdateComPortsList();
@@ -508,6 +650,7 @@ namespace Sapphire_Control_Panel
             else
             {
                 WriteSingle(0x80);
+
                 byte[] sends = new byte[64 * 30 * 2];
                 int ptr = 0;
                 for (int i = 0; i < 30 * 64; i++)
@@ -519,6 +662,8 @@ namespace Sapphire_Control_Panel
                 }
 
                 WriteBurst(sends, 30 * 64 * 2);
+
+                WriteSingle(0x86);
                 SetProgress(100);
             }
             SetStatus(0);
@@ -527,6 +672,82 @@ namespace Sapphire_Control_Panel
         private void button1_Click(object sender, EventArgs e)
         {
             WriteSingle(0xFF);
+        }
+
+        private void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+           AddLogMessage("PORT:" + port.ReadLine() + "\r\n");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string[] s1 = inputText.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            WriteSingle(0x83);
+            WriteSingle(0x80);
+            WriteSingle(0x82);
+            WriteSingle(64);
+            int line = 65;
+            foreach (var s in inputText.Lines)
+            {
+                foreach (var c in s)
+                {
+                    byte d = translate(c);
+                    byte upper = (byte)(0x10 | ((d & 0xF0) >> 4));
+                    byte lower = (byte) (d & 0x0F);
+
+                    WriteSingle(upper);
+                    WriteSingle(lower);
+                }
+
+                WriteSingle(0x82);
+                WriteSingle((byte)(line++));
+                WriteSingle(0x81);
+                WriteSingle(0);
+            }
+
+            if (!overlayCheck.Checked)
+            {
+                WriteSingle(0x85);
+            }
+            else
+            {
+                if (orCheck.Checked)
+                {
+                    WriteSingle(0x87);
+                }
+                else
+                {
+                    WriteSingle(0x88);
+                }
+                
+            }
+            
+        }
+
+        private void orCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (orCheck.Checked == true)
+            {
+                xorCheck.Checked = false;
+                orCheck.BackColor = Color.Aqua;
+                xorCheck.BackColor = Color.FromKnownColor(KnownColor.Control);
+                xorCheck.UseVisualStyleBackColor = true;
+                orCheck.UseVisualStyleBackColor = true;
+            }
+        }
+
+        private void xorCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (xorCheck.Checked == true)
+            {
+                orCheck.Checked = false;
+                xorCheck.BackColor = Color.Aqua;
+                orCheck.BackColor = Color.FromKnownColor(KnownColor.Control);
+
+                xorCheck.UseVisualStyleBackColor = true;
+                orCheck.UseVisualStyleBackColor = true;
+            }
+
         }
     }
 }
