@@ -32,6 +32,7 @@ namespace Sapphire_Control_Panel
             this.components = new System.ComponentModel.Container();
             this.port = new System.IO.Ports.SerialPort(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.baudrateCorrectionButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.baudrateBox = new System.Windows.Forms.TextBox();
@@ -48,15 +49,17 @@ namespace Sapphire_Control_Panel
             this.logBox = new System.Windows.Forms.RichTextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.selectLV2 = new System.Windows.Forms.RadioButton();
-            this.selectLSimple = new System.Windows.Forms.RadioButton();
-            this.resizeCheck = new System.Windows.Forms.CheckBox();
-            this.refOpenFileButton = new System.Windows.Forms.Button();
+            this.selectAllTransfer_pic = new System.Windows.Forms.RadioButton();
+            this.selectShrinkedTransfer_pic = new System.Windows.Forms.RadioButton();
+            this.resizePicture = new System.Windows.Forms.CheckBox();
+            this.refOpenPicButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.openFilePath = new System.Windows.Forms.TextBox();
+            this.openPicPath = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.generateButton = new System.Windows.Forms.Button();
-            this.showButton = new System.Windows.Forms.Button();
+            this.generateMovDataButton = new System.Windows.Forms.Button();
+            this.transferMovButton = new System.Windows.Forms.Button();
+            this.genertatePicDataButton = new System.Windows.Forms.Button();
+            this.transferPicButton = new System.Windows.Forms.Button();
             this.statusBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -71,6 +74,13 @@ namespace Sapphire_Control_Panel
             this.button2 = new System.Windows.Forms.Button();
             this.overlayCheck = new System.Windows.Forms.CheckBox();
             this.inputText = new System.Windows.Forms.RichTextBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.selectAllTransfer_mov = new System.Windows.Forms.RadioButton();
+            this.selectShrinkedTransfer_mov = new System.Windows.Forms.RadioButton();
+            this.refOpenMovButton = new System.Windows.Forms.Button();
+            this.openMovPath = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,14 +90,16 @@ namespace Sapphire_Control_Panel
             ((System.ComponentModel.ISupportInitialize)(this.previewPic)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // port
             // 
-            this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.port_DataReceived);
+            this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.DataReceived);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.baudrateCorrectionButton);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.baudrateBox);
@@ -104,6 +116,15 @@ namespace Sapphire_Control_Panel
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "接続";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(163, 185);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(32, 16);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "bps";
             // 
             // baudrateCorrectionButton
             // 
@@ -131,10 +152,10 @@ namespace Sapphire_Control_Panel
             this.baudrateBox.Location = new System.Drawing.Point(11, 182);
             this.baudrateBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.baudrateBox.Name = "baudrateBox";
-            this.baudrateBox.Size = new System.Drawing.Size(184, 23);
+            this.baudrateBox.Size = new System.Drawing.Size(145, 23);
             this.baudrateBox.TabIndex = 8;
             this.baudrateBox.Text = "300";
-            this.baudrateBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.baudrateBox_KeyPress);
+            this.baudrateBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.BaudrateCharacterCheck);
             // 
             // updatePortsListButton
             // 
@@ -193,7 +214,7 @@ namespace Sapphire_Control_Panel
             // 
             this.disconnectIndicator.AutoCheck = false;
             this.disconnectIndicator.AutoSize = true;
-            this.disconnectIndicator.Location = new System.Drawing.Point(190, 74);
+            this.disconnectIndicator.Location = new System.Drawing.Point(220, 72);
             this.disconnectIndicator.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.disconnectIndicator.Name = "disconnectIndicator";
             this.disconnectIndicator.Size = new System.Drawing.Size(58, 20);
@@ -223,7 +244,7 @@ namespace Sapphire_Control_Panel
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox2.Size = new System.Drawing.Size(203, 162);
+            this.groupBox2.Size = new System.Drawing.Size(203, 168);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "制御";
@@ -236,44 +257,44 @@ namespace Sapphire_Control_Panel
             this.button1.Location = new System.Drawing.Point(8, 22);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(187, 128);
+            this.button1.Size = new System.Drawing.Size(187, 134);
             this.button1.TabIndex = 0;
             this.button1.Text = "PANIC!";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.SoftwareReset);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.logBox);
-            this.groupBox3.Location = new System.Drawing.Point(13, 579);
+            this.groupBox3.Location = new System.Drawing.Point(13, 453);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox3.Size = new System.Drawing.Size(470, 90);
+            this.groupBox3.Size = new System.Drawing.Size(828, 216);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "ログ";
             // 
             // logBox
             // 
-            this.logBox.Font = new System.Drawing.Font("PC-9800", 8.25F);
+            this.logBox.Font = new System.Drawing.Font("PC-9800", 12F);
             this.logBox.Location = new System.Drawing.Point(8, 22);
             this.logBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.logBox.Name = "logBox";
             this.logBox.ReadOnly = true;
-            this.logBox.Size = new System.Drawing.Size(454, 61);
+            this.logBox.Size = new System.Drawing.Size(812, 188);
             this.logBox.TabIndex = 0;
             this.logBox.Text = "";
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.selectLV2);
-            this.groupBox4.Controls.Add(this.selectLSimple);
-            this.groupBox4.Controls.Add(this.resizeCheck);
-            this.groupBox4.Controls.Add(this.refOpenFileButton);
+            this.groupBox4.Controls.Add(this.selectAllTransfer_pic);
+            this.groupBox4.Controls.Add(this.selectShrinkedTransfer_pic);
+            this.groupBox4.Controls.Add(this.resizePicture);
+            this.groupBox4.Controls.Add(this.refOpenPicButton);
             this.groupBox4.Controls.Add(this.label5);
-            this.groupBox4.Controls.Add(this.openFilePath);
+            this.groupBox4.Controls.Add(this.openPicPath);
             this.groupBox4.Location = new System.Drawing.Point(224, 12);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox4.Name = "groupBox4";
@@ -281,7 +302,7 @@ namespace Sapphire_Control_Panel
             this.groupBox4.Size = new System.Drawing.Size(259, 160);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "メイン";
+            this.groupBox4.Text = "静止画";
             // 
             // label10
             // 
@@ -293,53 +314,53 @@ namespace Sapphire_Control_Panel
             this.label10.TabIndex = 28;
             this.label10.Text = "転送方式";
             // 
-            // selectLV2
+            // selectAllTransfer_pic
             // 
-            this.selectLV2.AutoSize = true;
-            this.selectLV2.Location = new System.Drawing.Point(134, 126);
-            this.selectLV2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.selectLV2.Name = "selectLV2";
-            this.selectLV2.Size = new System.Drawing.Size(66, 20);
-            this.selectLV2.TabIndex = 27;
-            this.selectLV2.TabStop = true;
-            this.selectLV2.Text = "L-V2+";
-            this.selectLV2.UseVisualStyleBackColor = true;
-            this.selectLV2.CheckedChanged += new System.EventHandler(this.selectLV2_CheckedChanged);
+            this.selectAllTransfer_pic.AutoSize = true;
+            this.selectAllTransfer_pic.Location = new System.Drawing.Point(134, 126);
+            this.selectAllTransfer_pic.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.selectAllTransfer_pic.Name = "selectAllTransfer_pic";
+            this.selectAllTransfer_pic.Size = new System.Drawing.Size(74, 20);
+            this.selectAllTransfer_pic.TabIndex = 27;
+            this.selectAllTransfer_pic.TabStop = true;
+            this.selectAllTransfer_pic.Text = "全転送";
+            this.selectAllTransfer_pic.UseVisualStyleBackColor = true;
+            this.selectAllTransfer_pic.CheckedChanged += new System.EventHandler(this.CheckedAllPictureTransfer);
             // 
-            // selectLSimple
+            // selectShrinkedTransfer_pic
             // 
-            this.selectLSimple.AutoSize = true;
-            this.selectLSimple.Location = new System.Drawing.Point(8, 126);
-            this.selectLSimple.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.selectLSimple.Name = "selectLSimple";
-            this.selectLSimple.Size = new System.Drawing.Size(90, 20);
-            this.selectLSimple.TabIndex = 26;
-            this.selectLSimple.TabStop = true;
-            this.selectLSimple.Text = "L-Simple";
-            this.selectLSimple.UseVisualStyleBackColor = true;
-            this.selectLSimple.CheckedChanged += new System.EventHandler(this.selectLSimple_CheckedChanged);
+            this.selectShrinkedTransfer_pic.AutoSize = true;
+            this.selectShrinkedTransfer_pic.Location = new System.Drawing.Point(8, 126);
+            this.selectShrinkedTransfer_pic.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.selectShrinkedTransfer_pic.Name = "selectShrinkedTransfer_pic";
+            this.selectShrinkedTransfer_pic.Size = new System.Drawing.Size(90, 20);
+            this.selectShrinkedTransfer_pic.TabIndex = 26;
+            this.selectShrinkedTransfer_pic.TabStop = true;
+            this.selectShrinkedTransfer_pic.Text = "短縮転送";
+            this.selectShrinkedTransfer_pic.UseVisualStyleBackColor = true;
+            this.selectShrinkedTransfer_pic.CheckedChanged += new System.EventHandler(this.CheckedShrinkedPictureTransfer);
             // 
-            // resizeCheck
+            // resizePicture
             // 
-            this.resizeCheck.AutoSize = true;
-            this.resizeCheck.Location = new System.Drawing.Point(8, 75);
-            this.resizeCheck.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.resizeCheck.Name = "resizeCheck";
-            this.resizeCheck.Size = new System.Drawing.Size(91, 20);
-            this.resizeCheck.TabIndex = 15;
-            this.resizeCheck.Text = "リサイズ";
-            this.resizeCheck.UseVisualStyleBackColor = true;
+            this.resizePicture.AutoSize = true;
+            this.resizePicture.Location = new System.Drawing.Point(8, 75);
+            this.resizePicture.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.resizePicture.Name = "resizePicture";
+            this.resizePicture.Size = new System.Drawing.Size(91, 20);
+            this.resizePicture.TabIndex = 15;
+            this.resizePicture.Text = "リサイズ";
+            this.resizePicture.UseVisualStyleBackColor = true;
             // 
-            // refOpenFileButton
+            // refOpenPicButton
             // 
-            this.refOpenFileButton.Location = new System.Drawing.Point(173, 72);
-            this.refOpenFileButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.refOpenFileButton.Name = "refOpenFileButton";
-            this.refOpenFileButton.Size = new System.Drawing.Size(75, 24);
-            this.refOpenFileButton.TabIndex = 14;
-            this.refOpenFileButton.Text = "参照";
-            this.refOpenFileButton.UseVisualStyleBackColor = true;
-            this.refOpenFileButton.Click += new System.EventHandler(this.refOpenFileButton_Click);
+            this.refOpenPicButton.Location = new System.Drawing.Point(173, 72);
+            this.refOpenPicButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.refOpenPicButton.Name = "refOpenPicButton";
+            this.refOpenPicButton.Size = new System.Drawing.Size(75, 24);
+            this.refOpenPicButton.TabIndex = 14;
+            this.refOpenPicButton.Text = "参照";
+            this.refOpenPicButton.UseVisualStyleBackColor = true;
+            this.refOpenPicButton.Click += new System.EventHandler(this.OpenPicture);
             // 
             // label5
             // 
@@ -351,49 +372,74 @@ namespace Sapphire_Control_Panel
             this.label5.TabIndex = 13;
             this.label5.Text = "表示対象のファイル(静止画)";
             // 
-            // openFilePath
+            // openPicPath
             // 
-            this.openFilePath.Location = new System.Drawing.Point(8, 40);
-            this.openFilePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.openFilePath.Name = "openFilePath";
-            this.openFilePath.Size = new System.Drawing.Size(240, 23);
-            this.openFilePath.TabIndex = 12;
+            this.openPicPath.Location = new System.Drawing.Point(8, 40);
+            this.openPicPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.openPicPath.Name = "openPicPath";
+            this.openPicPath.Size = new System.Drawing.Size(240, 23);
+            this.openPicPath.TabIndex = 12;
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.generateButton);
-            this.groupBox6.Controls.Add(this.showButton);
-            this.groupBox6.Location = new System.Drawing.Point(224, 386);
+            this.groupBox6.Controls.Add(this.generateMovDataButton);
+            this.groupBox6.Controls.Add(this.transferMovButton);
+            this.groupBox6.Controls.Add(this.genertatePicDataButton);
+            this.groupBox6.Controls.Add(this.transferPicButton);
+            this.groupBox6.Location = new System.Drawing.Point(224, 285);
             this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox6.Size = new System.Drawing.Size(259, 55);
+            this.groupBox6.Size = new System.Drawing.Size(259, 162);
             this.groupBox6.TabIndex = 22;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "操作";
             // 
-            // generateButton
+            // generateMovDataButton
             // 
-            this.generateButton.Location = new System.Drawing.Point(8, 22);
-            this.generateButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new System.Drawing.Size(102, 25);
-            this.generateButton.TabIndex = 13;
-            this.generateButton.Text = "データ生成";
-            this.generateButton.UseVisualStyleBackColor = true;
-            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
+            this.generateMovDataButton.Location = new System.Drawing.Point(134, 22);
+            this.generateMovDataButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.generateMovDataButton.Name = "generateMovDataButton";
+            this.generateMovDataButton.Size = new System.Drawing.Size(117, 57);
+            this.generateMovDataButton.TabIndex = 15;
+            this.generateMovDataButton.Text = "動画\r\nデータ生成";
+            this.generateMovDataButton.UseVisualStyleBackColor = true;
+            this.generateMovDataButton.Click += new System.EventHandler(this.GenerateMovieData);
             // 
-            // showButton
+            // transferMovButton
             // 
-            this.showButton.Font = new System.Drawing.Font("PC-9800", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.showButton.Location = new System.Drawing.Point(118, 22);
-            this.showButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.showButton.Name = "showButton";
-            this.showButton.Size = new System.Drawing.Size(130, 25);
-            this.showButton.TabIndex = 10;
-            this.showButton.Text = "転送";
-            this.showButton.UseVisualStyleBackColor = true;
-            this.showButton.Click += new System.EventHandler(this.showButton_Click);
+            this.transferMovButton.Font = new System.Drawing.Font("PC-9800", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.transferMovButton.Location = new System.Drawing.Point(134, 85);
+            this.transferMovButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.transferMovButton.Name = "transferMovButton";
+            this.transferMovButton.Size = new System.Drawing.Size(117, 65);
+            this.transferMovButton.TabIndex = 14;
+            this.transferMovButton.Text = "動画転送";
+            this.transferMovButton.UseVisualStyleBackColor = true;
+            this.transferMovButton.Click += new System.EventHandler(this.TransferMovie);
+            // 
+            // genertatePicDataButton
+            // 
+            this.genertatePicDataButton.Location = new System.Drawing.Point(8, 22);
+            this.genertatePicDataButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.genertatePicDataButton.Name = "genertatePicDataButton";
+            this.genertatePicDataButton.Size = new System.Drawing.Size(126, 57);
+            this.genertatePicDataButton.TabIndex = 13;
+            this.genertatePicDataButton.Text = "静止画\r\nデータ生成";
+            this.genertatePicDataButton.UseVisualStyleBackColor = true;
+            this.genertatePicDataButton.Click += new System.EventHandler(this.GeneratePictureData);
+            // 
+            // transferPicButton
+            // 
+            this.transferPicButton.Font = new System.Drawing.Font("PC-9800", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.transferPicButton.Location = new System.Drawing.Point(8, 85);
+            this.transferPicButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.transferPicButton.Name = "transferPicButton";
+            this.transferPicButton.Size = new System.Drawing.Size(126, 65);
+            this.transferPicButton.TabIndex = 10;
+            this.transferPicButton.Text = "静止画転送";
+            this.transferPicButton.UseVisualStyleBackColor = true;
+            this.transferPicButton.Click += new System.EventHandler(this.TransferPicture);
             // 
             // statusBox
             // 
@@ -401,7 +447,7 @@ namespace Sapphire_Control_Panel
             this.statusBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.statusBox.Name = "statusBox";
             this.statusBox.ReadOnly = true;
-            this.statusBox.Size = new System.Drawing.Size(152, 23);
+            this.statusBox.Size = new System.Drawing.Size(247, 23);
             this.statusBox.TabIndex = 13;
             this.statusBox.Text = "IDLE";
             // 
@@ -430,7 +476,7 @@ namespace Sapphire_Control_Panel
             this.progress.Location = new System.Drawing.Point(96, 52);
             this.progress.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(152, 16);
+            this.progress.Size = new System.Drawing.Size(248, 16);
             this.progress.TabIndex = 11;
             // 
             // groupBox7
@@ -440,7 +486,7 @@ namespace Sapphire_Control_Panel
             this.groupBox7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.groupBox7.Size = new System.Drawing.Size(259, 95);
+            this.groupBox7.Size = new System.Drawing.Size(259, 101);
             this.groupBox7.TabIndex = 30;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "プレビュー";
@@ -464,9 +510,9 @@ namespace Sapphire_Control_Panel
             this.groupBox5.Controls.Add(this.label8);
             this.groupBox5.Controls.Add(this.disconnectIndicator);
             this.groupBox5.Controls.Add(this.connectIndicator);
-            this.groupBox5.Location = new System.Drawing.Point(224, 279);
+            this.groupBox5.Location = new System.Drawing.Point(490, 178);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(259, 101);
+            this.groupBox5.Size = new System.Drawing.Size(351, 101);
             this.groupBox5.TabIndex = 31;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "状態";
@@ -487,9 +533,9 @@ namespace Sapphire_Control_Panel
             this.groupBox8.Controls.Add(this.button2);
             this.groupBox8.Controls.Add(this.overlayCheck);
             this.groupBox8.Controls.Add(this.inputText);
-            this.groupBox8.Location = new System.Drawing.Point(12, 447);
+            this.groupBox8.Location = new System.Drawing.Point(490, 285);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(471, 126);
+            this.groupBox8.Size = new System.Drawing.Size(351, 162);
             this.groupBox8.TabIndex = 32;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "テキスト領域";
@@ -497,7 +543,7 @@ namespace Sapphire_Control_Panel
             // xorCheck
             // 
             this.xorCheck.AutoSize = true;
-            this.xorCheck.Location = new System.Drawing.Point(330, 70);
+            this.xorCheck.Location = new System.Drawing.Point(279, 37);
             this.xorCheck.Name = "xorCheck";
             this.xorCheck.Size = new System.Drawing.Size(50, 20);
             this.xorCheck.TabIndex = 5;
@@ -509,7 +555,7 @@ namespace Sapphire_Control_Panel
             // orCheck
             // 
             this.orCheck.AutoSize = true;
-            this.orCheck.Location = new System.Drawing.Point(330, 48);
+            this.orCheck.Location = new System.Drawing.Point(210, 40);
             this.orCheck.Name = "orCheck";
             this.orCheck.Size = new System.Drawing.Size(42, 20);
             this.orCheck.TabIndex = 4;
@@ -520,18 +566,18 @@ namespace Sapphire_Control_Panel
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(330, 96);
+            this.button2.Location = new System.Drawing.Point(210, 63);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(123, 24);
+            this.button2.Size = new System.Drawing.Size(133, 87);
             this.button2.TabIndex = 3;
             this.button2.Text = "文字転送";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.TransferCharacter);
             // 
             // overlayCheck
             // 
             this.overlayCheck.AutoSize = true;
-            this.overlayCheck.Location = new System.Drawing.Point(330, 22);
+            this.overlayCheck.Location = new System.Drawing.Point(210, 20);
             this.overlayCheck.Name = "overlayCheck";
             this.overlayCheck.Size = new System.Drawing.Size(123, 20);
             this.overlayCheck.TabIndex = 2;
@@ -543,15 +589,96 @@ namespace Sapphire_Control_Panel
             this.inputText.Font = new System.Drawing.Font("PC-9800", 8F);
             this.inputText.Location = new System.Drawing.Point(12, 22);
             this.inputText.Name = "inputText";
-            this.inputText.Size = new System.Drawing.Size(310, 98);
+            this.inputText.Size = new System.Drawing.Size(192, 128);
             this.inputText.TabIndex = 0;
             this.inputText.Text = "";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.label6);
+            this.groupBox9.Controls.Add(this.selectAllTransfer_mov);
+            this.groupBox9.Controls.Add(this.selectShrinkedTransfer_mov);
+            this.groupBox9.Controls.Add(this.refOpenMovButton);
+            this.groupBox9.Controls.Add(this.openMovPath);
+            this.groupBox9.Controls.Add(this.label4);
+            this.groupBox9.Location = new System.Drawing.Point(490, 12);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(351, 160);
+            this.groupBox9.TabIndex = 33;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "動画";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 107);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(72, 16);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "転送方式";
+            // 
+            // selectAllTransfer_mov
+            // 
+            this.selectAllTransfer_mov.AutoSize = true;
+            this.selectAllTransfer_mov.Location = new System.Drawing.Point(130, 126);
+            this.selectAllTransfer_mov.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.selectAllTransfer_mov.Name = "selectAllTransfer_mov";
+            this.selectAllTransfer_mov.Size = new System.Drawing.Size(74, 20);
+            this.selectAllTransfer_mov.TabIndex = 34;
+            this.selectAllTransfer_mov.TabStop = true;
+            this.selectAllTransfer_mov.Text = "全転送";
+            this.selectAllTransfer_mov.UseVisualStyleBackColor = true;
+            this.selectAllTransfer_mov.CheckedChanged += new System.EventHandler(this.selectAllTransfer_mov_CheckedChanged);
+            // 
+            // selectShrinkedTransfer_mov
+            // 
+            this.selectShrinkedTransfer_mov.AutoSize = true;
+            this.selectShrinkedTransfer_mov.Location = new System.Drawing.Point(9, 126);
+            this.selectShrinkedTransfer_mov.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.selectShrinkedTransfer_mov.Name = "selectShrinkedTransfer_mov";
+            this.selectShrinkedTransfer_mov.Size = new System.Drawing.Size(90, 20);
+            this.selectShrinkedTransfer_mov.TabIndex = 33;
+            this.selectShrinkedTransfer_mov.TabStop = true;
+            this.selectShrinkedTransfer_mov.Text = "短縮転送";
+            this.selectShrinkedTransfer_mov.UseVisualStyleBackColor = true;
+            this.selectShrinkedTransfer_mov.CheckedChanged += new System.EventHandler(this.selectShrinkedTransfer_mov_CheckedChanged);
+            // 
+            // refOpenMovButton
+            // 
+            this.refOpenMovButton.Location = new System.Drawing.Point(268, 72);
+            this.refOpenMovButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.refOpenMovButton.Name = "refOpenMovButton";
+            this.refOpenMovButton.Size = new System.Drawing.Size(75, 24);
+            this.refOpenMovButton.TabIndex = 31;
+            this.refOpenMovButton.Text = "参照";
+            this.refOpenMovButton.UseVisualStyleBackColor = true;
+            this.refOpenMovButton.Click += new System.EventHandler(this.refOpenMovButton_Click);
+            // 
+            // openMovPath
+            // 
+            this.openMovPath.Location = new System.Drawing.Point(7, 40);
+            this.openMovPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.openMovPath.Name = "openMovPath";
+            this.openMovPath.Size = new System.Drawing.Size(337, 23);
+            this.openMovPath.TabIndex = 29;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(4, 19);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(200, 16);
+            this.label4.TabIndex = 30;
+            this.label4.Text = "表示対象のファイル(動画)";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(487, 681);
+            this.ClientSize = new System.Drawing.Size(858, 681);
+            this.Controls.Add(this.groupBox9);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox6);
@@ -579,6 +706,8 @@ namespace Sapphire_Control_Panel
             this.groupBox5.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -603,19 +732,19 @@ namespace Sapphire_Control_Panel
         private System.Windows.Forms.RichTextBox logBox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.RadioButton selectLV2;
-        private System.Windows.Forms.RadioButton selectLSimple;
+        private System.Windows.Forms.RadioButton selectAllTransfer_pic;
+        private System.Windows.Forms.RadioButton selectShrinkedTransfer_pic;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.TextBox statusBox;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button generateButton;
+        private System.Windows.Forms.Button genertatePicDataButton;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ProgressBar progress;
-        private System.Windows.Forms.Button showButton;
-        private System.Windows.Forms.CheckBox resizeCheck;
-        private System.Windows.Forms.Button refOpenFileButton;
+        private System.Windows.Forms.Button transferPicButton;
+        private System.Windows.Forms.CheckBox resizePicture;
+        private System.Windows.Forms.Button refOpenPicButton;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox openFilePath;
+        private System.Windows.Forms.TextBox openPicPath;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.PictureBox previewPic;
         private System.Windows.Forms.GroupBox groupBox5;
@@ -626,6 +755,16 @@ namespace Sapphire_Control_Panel
         private System.Windows.Forms.RichTextBox inputText;
         private System.Windows.Forms.RadioButton xorCheck;
         private System.Windows.Forms.RadioButton orCheck;
+        private System.Windows.Forms.Button generateMovDataButton;
+        private System.Windows.Forms.Button transferMovButton;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.RadioButton selectAllTransfer_mov;
+        private System.Windows.Forms.RadioButton selectShrinkedTransfer_mov;
+        private System.Windows.Forms.Button refOpenMovButton;
+        private System.Windows.Forms.TextBox openMovPath;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label9;
     }
 }
 
