@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -446,6 +447,8 @@ namespace Sapphire_Control_Panel
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
             //インジケータを初期化
             AddLogMessage("初期化開始");
             logBox.HideSelection = false;
@@ -543,7 +546,7 @@ namespace Sapphire_Control_Panel
                 path = _openPictureFilePath;
             }
 
-            var task = Task.Run(() =>
+            Thread thread = new Thread(new ThreadStart(() =>
             {
                 while (!File.Exists(path))
                 {
@@ -569,7 +572,7 @@ namespace Sapphire_Control_Panel
                         if (0.5f <= err)
                         {
                             var pos = (x >> 3) + bitmapData.Stride * y;
-                            pixels[pos] |= (byte) (0x80 >> (x & 0x7));
+                            pixels[pos] |= (byte)(0x80 >> (x & 0x7));
                             err -= 1f;
                         }
 
@@ -597,23 +600,25 @@ namespace Sapphire_Control_Panel
                 buffers.Add(new byte[30 * 64]);
 
                 for (var y = 0; y < height; y++)
-                for (var x = 0; x < width; x++)
-                {
-                    pixel = newImg.GetPixel(x, y);
-                    data <<= 1;
-                    data |= pixel.R != 0xFF ? 1 : 0;
-                    bitPos++;
-                    if (bitPos != 8) continue;
-                    buffers[0][bytePos++] = (byte) data;
-                    data = 0;
-                    bitPos = 0;
-                }
+                    for (var x = 0; x < width; x++)
+                    {
+                        pixel = newImg.GetPixel(x, y);
+                        data <<= 1;
+                        data |= pixel.R != 0xFF ? 1 : 0;
+                        bitPos++;
+                        if (bitPos != 8) continue;
+                        buffers[0][bytePos++] = (byte)data;
+                        data = 0;
+                        bitPos = 0;
+                    }
 
                 ShowPreview(newImg);
                 bitmap.Dispose();
                 SetStatus(0);
                 SetProgress(100);
-            });
+            }));
+
+            thread.Start();
         }
 
         private void SoftwareReset(object sender, EventArgs e)
@@ -671,18 +676,18 @@ namespace Sapphire_Control_Panel
             }
             else
             {
-                var task = Task.Run(() =>
+                Thread thread = new Thread(new ThreadStart(() =>
                 {
                     foreach (var b in buffers)
                     {
-                        byte[] data = {0x80, 0x84, 0x86};
+                        byte[] data = { 0x80, 0x84, 0x86 };
                         port.Write(data, 0, 2);
                         port.Write(b, 0, b.Length);
                         port.Write(data, 2, 1);
                     }
-
                     SetStatus(0);
-                });
+                }));
+                thread.Start();
             }
         }
 
@@ -753,19 +758,37 @@ namespace Sapphire_Control_Panel
             SetProgress(0);
             Bitmap bitmap;
             var ext = Path.GetExtension(_openMovieFilePath);
+            float frms = float.Parse(framerate.Text);
+
+            if (delCheck.Checked)
+            {
+                Directory.Delete(Path.GetFileNameWithoutExtension(_openMovieFilePath),true);
+            }
+
             if (!Directory.Exists(Path.GetFileNameWithoutExtension(_openMovieFilePath)))
             {
                 Directory.CreateDirectory(Path.GetFileNameWithoutExtension(_openMovieFilePath) ??
                                           throw new InvalidOperationException());
-                var arg =
-                    $"-i \"{_openMovieFilePath}\" -vf \"scale=w=trunc(ih*dar/2)*2:h=trunc(ih/2)*2, setsar=1/1, scale=w=240:h=64:force_original_aspect_ratio=1, pad=w=240:h=64:x=(ow-iw)/2:y=(oh-ih)/2:color=#000000\" -r 29.02 -vcodec png \"{Path.GetFileNameWithoutExtension(_openMovieFilePath)}/image_%04d.png\"";
+
+                var arg = "";
+
+                if (!extendedCheck.Checked)
+                {
+                    arg = $"-i \"{_openMovieFilePath}\" -vf \"scale=w=trunc(ih*dar/2)*2:h=trunc(ih/2)*2, setsar=1/1, scale=w=240:h=64:force_original_aspect_ratio=1, pad=w=240:h=64:x=(ow-iw)/2:y=(oh-ih)/2:color=#000000\" -r {frms} -vcodec png \"{Path.GetFileNameWithoutExtension(_openMovieFilePath)}/image_%04d.png\"";
+
+                }
+                else
+                {
+                    arg = $"-i \"{_openMovieFilePath}\" -vf \"scale=w=trunc(ih*dar/2)*2:h=trunc(ih/2)*2, setsar=1/1, scale=w=240:h=64:force_original_aspect_ratio=1, pad=w=240:h=64:x=(ow-iw):y=(oh-ih):color=#000000\" -r {frms} -vcodec png \"{Path.GetFileNameWithoutExtension(_openMovieFilePath)}/image_%04d.png\"";
+
+                }
                 RunFFmpeg(arg);
             }
 
             int fileCount = Directory.GetFiles(Path.GetFileNameWithoutExtension(_openMovieFilePath), "*.png",
                 SearchOption.TopDirectoryOnly).Length;
             AddLogMessage("フレーム分割&再生速度調整終了　総フレーム数:" + fileCount.ToString());
-            var task = Task.Run(() =>
+            Thread thread = new Thread(new ThreadStart(() =>
             {
                 for (int i = 1; i <= fileCount; i++)
                 {
@@ -786,6 +809,21 @@ namespace Sapphire_Control_Panel
                     {
                         bitmap = new Bitmap(Path.GetFileNameWithoutExtension(_openMovieFilePath) + "/image_" +
                                             i.ToString("D4") + ".png");
+
+
+                        Graphics g = Graphics.FromImage(bitmap);
+                        Font fnt = new Font("PC-9800", 11);
+                        var span = new TimeSpan(0, 0, (int)(fileCount / frms));
+                        var total = span.ToString(@"mm\:ss");
+                        span = new TimeSpan(0, 0, (int)(i / frms));
+                        var current = span.ToString(@"mm\:ss");
+                        g.DrawString($"M:{Path.GetFileNameWithoutExtension(_openMovieFilePath)}", fnt, Brushes.White, 0, 0);
+                        g.DrawString($"F:{i:D4}/{fileCount:D4}", fnt, Brushes.White, 0, 25);
+                        g.DrawString($"T:{current}/{total}", fnt, Brushes.White, 0, 50);
+
+                        fnt.Dispose();
+                        g.Dispose();
+
                         var newImg = new Bitmap(bitmap.Width, bitmap.Height,
                             PixelFormat.Format1bppIndexed);
                         var bitmapData = newImg.LockBits(
@@ -819,9 +857,12 @@ namespace Sapphire_Control_Panel
                             errors[1] = new float[errors[0].Length];
                         }
 
+
+
                         var ptr = bitmapData.Scan0;
                         Marshal.Copy(pixels, 0, ptr, pixels.Length);
                         newImg.UnlockBits(bitmapData);
+
 
                         var width = bitmap.Width;
                         var height = bitmap.Height;
@@ -866,9 +907,10 @@ namespace Sapphire_Control_Panel
 
                     SetProgress((int) (((float) i / (float) fileCount) * 100));
                 }
-
                 SetStatus(0);
-            });
+            }));
+
+            thread.Start();
         }
 
         private void refOpenMovButton_Click(object sender, EventArgs e)
@@ -885,6 +927,11 @@ namespace Sapphire_Control_Panel
         private void selectShrinkedTransfer_mov_CheckedChanged(object sender, EventArgs e)
         {
             SetTransferMethod(false, selectShrinkedTransfer_mov.Checked);
+        }
+
+        private void extendedCheck_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
