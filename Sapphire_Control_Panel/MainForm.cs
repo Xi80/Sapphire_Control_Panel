@@ -678,6 +678,8 @@ namespace Sapphire_Control_Panel
             {
                 Thread thread = new Thread(new ThreadStart(() =>
                 {
+                    var sw = new System.Diagnostics.Stopwatch();
+                    sw.Start();
                     foreach (var b in buffers)
                     {
                         byte[] data = { 0x80, 0x84, 0x86 };
@@ -685,6 +687,18 @@ namespace Sapphire_Control_Panel
                         port.Write(b, 0, b.Length);
                         port.Write(data, 2, 1);
                     }
+                    sw.Stop();
+
+                    AddLogMessage($"送信終了：経過時間{sw.ElapsedMilliseconds}ミリ秒");
+
+                    int fileCount = Directory.GetFiles(Path.GetFileNameWithoutExtension(_openMovieFilePath), "*.png",
+                        SearchOption.TopDirectoryOnly).Length;
+                    double frmre = fileCount / (sw.ElapsedMilliseconds / 1000.0);
+                    double frmth = double.Parse(framerate.Text);
+                    double speed = frmre / frmth;
+                    AddLogMessage($"再生速度:{(speed * 100.0):F4}%");
+                    AddLogMessage($"補正値:{frmre}fps");
+
                     SetStatus(0);
                 }));
                 thread.Start();
@@ -812,7 +826,7 @@ namespace Sapphire_Control_Panel
 
 
                         Graphics g = Graphics.FromImage(bitmap);
-                        Font fnt = new Font("PC-9800", 11);
+                        Font fnt = new Font("PC-9800", 12);
                         var span = new TimeSpan(0, 0, (int)(fileCount / frms));
                         var total = span.ToString(@"mm\:ss");
                         span = new TimeSpan(0, 0, (int)(i / frms));
